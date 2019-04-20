@@ -1,7 +1,7 @@
 (ns chapter1.ex1_35)
 ; find golden ratio phi - x |> 1 + 1/x
 
-(def tolerance 0.001)
+(def tolerance 0.000001)
 
 (defn close-enough? [v1 v2](< (Math/abs (- v1 v2)) tolerance))
 
@@ -24,10 +24,6 @@
 (defn phi [x] (+ 1 (/ 1 x)))
 (fixed-point phi 1.0)
 (fixed-point #(Math/cos %) 1.0)
+(fixed-point #(Math/sin %) 1.0)
 
-(phi 1)
-(phi 2.0)
-(phi 1.5)
-(phi (phi (phi (phi (phi 1.5)))))
-(phi )
 
