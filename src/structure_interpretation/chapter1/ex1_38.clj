@@ -1,59 +1,44 @@
-(ns chapter1.ex1_37)
+(ns chapter1.ex1_38)
 
+(def phi-value 1.608339)
 
-(fixed-point phi 1.6)
-(def phi-value (fixed-point phi 1.6))
-
-(defn cont-frac
-  [n d k]
-  (loop [step k
-         next (/ (n step) (d step))]
-    (prn step "-" next)
-    (if (= step 0)
-      next
-      (recur (dec step) (/ (n step) 
-                           (+ (d step) next))))))
-
-(/ 1 phi-value)
-
-;0.6180339889579018
-;1/phi
-(cont-frac 
- (constantly 1.0) 
- (constantly 1.0) 
- 11)
-
-;e constant
+(defn cont-frac [n d k]
+  (loop [k k
+         acc 0]
+    (if (< k 1) acc
+        (recur (dec k) (/ (n k) (+ (d k) acc))))))
 
 (cont-frac
  (constantly 1.0)
- (fn [i] 
-   (let [x (dec i)]
-     (if (or (= 0 (mod x 3)))
-       (* 2 (inc (/ x 3)))
-       1)))
- 5)
-
-(+ 2 (cont-frac
-      (constantly 1.0)
-      (fn [i]
-        (let [x (dec i)]
-          (if (or (= 0 (mod x 3)))
-            (* 2 (inc (/ x 3)))
-            1)))
-      5))
-(/ Math/E (cont-frac
-           (constantly 1.0)
-           (fn [i]
-             (let [x (dec i)]
-               (if (or (= 0 (mod x 3)))
-                 (* 2 (inc (/ x 3)))
-                 1.0)))
-           50))
-
-(defn test-fun 
-  [i]
+ (constantly 1.0)
+ 16)
+(defn euler-denom [i]
   (let [x (dec i)]
     (if (or (= 0 (mod x 3)))
       (* 2 (inc (/ x 3)))
       1.0)))
+
+(euler-denom 0)
+;; => 1.0
+(euler-denom 1)
+;; => 2
+(euler-denom 2)
+;; => 1.0
+(euler-denom 3)
+;; => 1.0
+(euler-denom 4)
+;; => 4
+(- Math/E 2)
+;; => 0.7182818284590451
+(defn d [i]
+  (let [i (dec i)
+        idx (mod i 3)]
+    (cond 
+      (= idx 0) 1
+      (= idx 2) 1
+      (= idx 1) (* (/ (+ i 2) 3) 2))))
+
+(+ 2 (cont-frac
+ (fn [i] 1.0)
+ d
+ 90))
