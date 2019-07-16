@@ -1,8 +1,10 @@
 (ns chapter1.ex1_38)
 
-(defn cont-frac [n d k]
-  (loop [k k
+(defn cont-frac [n d max]
+  (loop [k max
          acc 0]
+    (prn " last term: " (+ (d k) acc))
+    (prn "accumulate: " acc)
     (if (< k 1) acc
         (recur (dec k) (/ (n k) (+ (d k) acc))))))
 
@@ -17,4 +19,4 @@
 (+ 2 (cont-frac
  (fn [i] 1.0)
  d
- 90))
+ 10))
