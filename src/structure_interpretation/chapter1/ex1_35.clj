@@ -21,6 +21,13 @@
       next
       (recur next (f next)))))
 
+(defn fixed-point [f first-guess]
+  (loop [guess first-guess
+         next (f first-guess)]
+    (if (close-enough? guess next)
+      next
+      (recur next (f next)))))
+
 (defn phi [x] (+ 1 (/ 1 x)))
 (fixed-point phi 1.0)
 (fixed-point #(Math/cos %) 1.0)
