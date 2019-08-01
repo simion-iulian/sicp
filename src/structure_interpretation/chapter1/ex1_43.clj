@@ -11,7 +11,7 @@
 
 ;1. use recursion
 ; x|>x+1 f(f...(f(x))) |> x+n
-; squaring woudl be 2^nth
+; squaring would be 2^nth power of x
 (defn repeated [f n]
   (if (= n 1)
     (fn [x] (f x))
@@ -19,3 +19,4 @@
 
 ((repeated square 2) 5)
 ((repeated inc 5) 1)
+
