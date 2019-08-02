@@ -13,7 +13,7 @@
     - [x] Constructing Procedures Using Lambda
     - [x] Procedures as General Methods
     - [x] Procedures as Returned Values  
-- Chapter 2 - **Building Abstractions with Data**:
+* Chapter 2 - **Building Abstractions with Data**:
   2.1 Introduction to Data Abstraction
   2.1.1 Example: Arithmetic Operations for Rational Numbers
       - Pairs
@@ -61,4 +61,4 @@
     - Representing term lists
     - Hierarchies of types in symbolic algebra
     - Extended exercise: Rational functions  
-- Chapter 3:
+* Chapter 3 - **Modularity, Objects, and State**:
