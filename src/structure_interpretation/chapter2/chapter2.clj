@@ -105,23 +105,66 @@
 ;Now implement a different representation for rectangles
 ;Can you design your system with suitable abstraction barriers?
 ;So that the same perimeter and procedures will work using either representation?
+(defn square [x] (* x x))
+(defn abs [n] (max n (- n)))
+(def tolerance 0.00000001)
+(defn close-enough? [v1 v2] (< (Math/abs (- v1 v2)) tolerance))
 
+(defn segment-length [s]
+  (Math/sqrt 
+    (+ (square (- (x-point (start-segment s)) (x-point (end-segment s))))
+       (square (- (y-point (start-segment s)) (y-point (end-segment s)))))))
 
+(segment-length (make-segment (make-point 1 1) 
+                              (make-point 2 2)))
 ;Do I make use only of points or of segments?
+(defn right-angle? [first-side second-side]
+  "Used to check the rectangle's construction correctness"
+  (if (= (end-segment first-side)
+         (start-segment second-side))
+    (let [first-side-squared  (square (segment-length first-side))
+          second-side-squared (square (segment-length second-side))
+          pythagoras-square   (+ first-side-squared second-side-squared)
+          hypothenuse-squared (square (segment-length (make-segment 
+                                                       (start-segment first-side) 
+                                                       (end-segment second-side))))]
+      (close-enough? pythagoras-square hypothenuse-squared))
+    (prn "First side not connected to the second side")))
 
+(right-angle? (make-segment
+               (make-point 1 1)
+               (make-point 1 3))
+              (make-segment
+               (make-point 1 3)
+               (make-point 2 3)))
 ;Point impelementation
+;How do I check it is enclosing?
 (defn make-rect 
+  "Constructs a rectangle given 4 points, in order"
   [point1 point2 point3 point4]
-  (list point1 point2 point3 point4))
+  (let [side1 (make-segment point1 point2)
+        side2 (make-segment point2 point3)        
+        side3 (make-segment point3 point4)
+        side4 (make-segment point4 point1)]
+    (cond
+      (right-angle? side1 side2) (prn "Points 1 2 and 3 don't define a right angle")
+      (right-angle? side2 side3) (prn "Points 2 3 and 4 don't define a right angle")
+      (right-angle? side3 side4) (prn "Points 3 4 and 1 don't define a right angle")
+      (right-angle? side4 side1) (prn "points 4 1 and 2 don't define a right angle")
+      :else (list side1 
+                  side2 
+                  side3
+                  side4))))
 
 (defn rect-point [rect x]
   (if (<= 0 x 3)
     (nth rect x)
     (prn "Outside allowed boundaries")))
 
-(defn abs [n] (max n (- n)))
-
 ;This works only for lines parallel to the axes, how can it work for all lines?
+(defn adjacent-sides [rect]
+  (throw Exception. "Get adjacent sides"))
+
 (defn rect-perimeter [rect]
   (let [twice-one-side   (* 2 (abs 
                                (- (-> rect (rect-point 0) x-point)
@@ -147,4 +190,4 @@
   (make-point 1 1)
   (make-point 1 3)
   (make-point 3 3)
-  (make-point 1 1)))
+  (make-point 3 1)))
