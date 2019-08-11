@@ -45,6 +45,13 @@
 (def tolerance 0.00000001)
 (defn close-enough? [v1 v2] (< (Math/abs (- v1 v2)) tolerance))
 
+;From the book:
+; In general, the under- lying idea of data abstraction is to identify for each type of data object a basic set of operations in terms 
+; of which all manipulations of data objects of that type will be expressed, and then to use only those operations in manipulating the data.
+;In this case the basic data objects are points and segments, adn I define operations on segments and points to determine properties about them
+;like if they are connected, their length, if there is a right angle between them and so on. 
+;In one sentence abstractions are about objects and their operations
+
 (defn segment-length [segment]
   (Math/sqrt 
     (+ (square (- (:x (:start segment)) 
@@ -93,8 +100,21 @@
       (close-enough? sum-squared-sides hypothenuse-squared))
     (prn "First side not connected to the second side")))
 
-;Point impelementation
-;How do I check it is enclosing?
+(defn right-triangle
+  "Makes a right angled triangle with the right angle being at point 2"
+  [p1 p2 p3]
+  (let [side1       (make-segment p1 p2)
+        side2       (make-segment p2 p3)
+        hypothenuse (make-segment p1 p3)]
+    (if (and (sides-connected? side1 side2)
+             (sides-connected? side1 hypothenuse)
+             (sides-connected? side2 hypothenuse))
+      (if (right-angle? side1 side2)
+        (list side1
+              side2
+              hypothenuse)
+        (prn "Not a right angle between the two triangle sides"))
+      (prn "Triangle is not enclosing"))))
 
 ;How do I ensure the points are bounded correctly?
 ;Euclidean implementation with Pythagora's theorem
@@ -117,26 +137,17 @@
                   side3
                   side4))))
 
-(defn right-triangle
-  "Makes a right angled triangle with the right angle being at point 2"
-  [p1 p2 p3]
-  (let [side1       (make-segment p1 p2)
-        side2       (make-segment p2 p3)
-        hypothenuse (make-segment p1 p3)]
-    (if (and (sides-connected? side1 side2)
-             (sides-connected? side1 hypothenuse)
-             (sides-connected? side2 hypothenuse))
-      (if (right-angle? side1 side2)
-        (list side1
-              side2
-              hypothenuse)
-        (prn "Not a right angle between the two triangle sides"))
-      (prn "Triangle is not enclosing"))))
-
 (right-triangle (point 1 3)
                 (point 1 1)
                 (point 3 1))
 
+;Compared to the four point impelementation
+; This implementation looks neater and many of the checks of wether the rectangle is rightly built are abstracted away
+; into how the triangles it is composed of is rightly build
+; This though creates a coupling between the order of points, though if the implementation of the triangle could be made to accept
+; an arbitrary order of the inputs, this could be made to work like that too.
+;A benefit of this would be more flexibility around what inputs it accepts.
+;Another one is that the use of the use of it's output (in the perimeter and area functions)
 (defn rectangle-two-triangles
   [p1 p2 p3 p4]
   "Constructs a recgantle given 4 points,
