@@ -100,30 +100,69 @@
 ;Euclidean implementation with Pythagora's theorem
 ;I use pythagora's theorem to prove there are right angles, as well as I check that all the sides are connected, while there being only right angles
 (defn rectangle-four-sides 
-  "Constructs a rectangle given 4 points, in order"
-  [point1 point2 point3 point4]
-  (let [side1 (make-segment point1 point2)
-        side2 (make-segment point2 point3)        
-        side3 (make-segment point3 point4)
-        side4 (make-segment point4 point1)]
+  "Constructs a rectangle given 4 points,
+   in the order of drawing a rectangle without lifting the pen from paer"
+  [p1 p2 p3 p4]
+  (let [side1 (make-segment p1 p2)
+        side2 (make-segment p2 p3)       
+        side3 (make-segment p3 p4)
+        side4 (make-segment p4 p1)]
     (cond
-      (not (right-angle? side1 side2)) "Points 1 2 and 3 don't define a right angle"
-      (not (right-angle? side2 side3)) "Points 2 3 and 4 don't define a right angle"
-      (not (right-angle? side3 side4)) "Points 3 4 and 1 don't define a right angle"
-      (not (right-angle? side4 side1)) "points 4 1 and 2 don't define a right angle"
+      (not (right-angle? side1 side2)) "Points 1 2 and 3 don't define a right triangle"
+      (not (right-angle? side2 side3)) "Points 2 3 and 4 don't define a right triangle"
+      (not (right-angle? side3 side4)) "Points 3 4 and 1 don't define a right triangle"
+      (not (right-angle? side4 side1)) "points 4 1 and 2 don't define a right triangle"
       :else (list side1 
                   side2 
                   side3
                   side4))))
 
+(defn right-triangle
+  "Makes a right angled triangle with the right angle being at point 2"
+  [p1 p2 p3]
+  (let [side1       (make-segment p1 p2)
+        side2       (make-segment p2 p3)
+        hypothenuse (make-segment p1 p3)]
+    (if (and (sides-connected? side1 side2)
+             (sides-connected? side1 hypothenuse)
+             (sides-connected? side2 hypothenuse))
+      (if (right-angle? side1 side2)
+        (list side1
+              side2
+              hypothenuse)
+        (prn "Not a right angle between the two triangle sides"))
+      (prn "Triangle is not enclosing"))))
+
+(right-triangle (point 1 3)
+                (point 1 1)
+                (point 3 1))
+
+(defn rectangle-two-triangles
+  [p1 p2 p3 p4]
+  "Constructs a recgantle given 4 points,
+  instead of a point geometry it uses a right triangle geometry"
+  (let [triangle1 (right-triangle p1 p2 p3)
+        triangle2 (right-triangle p1 p4 p3)]
+    (list triangle1
+          triangle2)))
+
 (defn adjacent-sides-lengths
   [rect]
-  [(segment-length (first rect))
-   (segment-length (second rect))])
-
+  (cond
+    (= 4 (count rect)) [(-> rect first segment-length)
+                        (-> rect second segment-length)]
+    (= 2 (count rect)) [(-> rect first first segment-length)
+                        (-> rect first second segment-length)]
+    :else "Rectangle is not point or triangle based"))
 
 (def r 
-  (rectangle-four-sides 
+  (rectangle-four-sides
+   (point 1 1)
+   (point 1 3)
+   (point 3 3)
+   (point 3 1)))
+(def r-triangles
+  (rectangle-two-triangles
    (point 1 1)
    (point 1 3)
    (point 3 3)
@@ -136,16 +175,30 @@
    (point 3.5 4)
    (point 1.5 2)))
 
+(def r2-triangles
+  (rectangle-two-triangles
+   (point 2.5 1)
+   (point 4.5 3)
+   (point 3.5 4)
+   (point 1.5 2)))
+
 (defn rect-perimeter [rect]
   (* 2 (reduce + (adjacent-sides-lengths rect))))
-
-(adjacent-sides-lengths r)
-(adjacent-sides-lengths r2)
-(rect-perimeter r)
-(rect-perimeter r2)
 
 (defn rect-area [rect]
   (reduce * (adjacent-sides-lengths rect)))
 
+(adjacent-sides-lengths r)
+(adjacent-sides-lengths r-triangles)
+(adjacent-sides-lengths r2)
+(adjacent-sides-lengths r2-triangles)
+
+(rect-perimeter r)
+(rect-perimeter r2)
+(rect-perimeter r-triangles)
+(rect-perimeter r2-triangles)
+
 (rect-area r)
+(rect-area r-triangles)
 (rect-area r2)
+(rect-area r2-triangles)
