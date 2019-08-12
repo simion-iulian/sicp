@@ -4,15 +4,6 @@
 ;Exercise 2.2
 ; Represent line segments in a plane
 ;Constructors
-(defn point [x y]
-  {:x x
-   :y y})
-
-(defn make-segment [a b]
-  (if (not= a b)
-    {:start a
-     :end   b}
-    (prn "Not a segment - points are the same")))
 
 (defn midpoint [line]
   (let [x1 (-> line :start :x)
@@ -51,6 +42,15 @@
 ;In this case the basic data objects are points and segments, adn I define operations on segments and points to determine properties about them
 ;like if they are connected, their length, if there is a right angle between them and so on. 
 ;In one sentence abstractions are about objects and their operations
+(defn point [x y]
+  {:x x
+   :y y})
+
+(defn make-segment [a b]
+  (if (not= a b)
+    {:start a
+     :end   b}
+    (prn "Not a segment - points are the same")))
 
 (defn segment-length [segment]
   (Math/sqrt 
