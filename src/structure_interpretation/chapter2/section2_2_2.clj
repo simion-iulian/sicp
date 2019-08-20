@@ -1,6 +1,6 @@
 (ns chapter2.section2-2-2)
 
-;Hieararchical Structures
+;Hierarchical Structures
 
 (def four-leaves (cons '(1 2) '(3 4 (5 6 7))))
 
