@@ -14,3 +14,5 @@
 
 (car cons1)
 (cdr cons1)
+
+;also see exercise 2.4

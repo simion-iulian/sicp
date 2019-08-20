@@ -1,7 +1,6 @@
 (ns chapter1.counting-change-better)
 
-(def denominations {
-                    1 1 
+(def denominations {1 1 
                     2 5 
                     3 10
                     4 25
