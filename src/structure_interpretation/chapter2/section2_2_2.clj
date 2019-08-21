@@ -11,4 +11,52 @@
         (+ (count-leaves (first x))
            (count-leaves (rest x)))))
 
+(defn count-leaves-map [coll]
+  (if (seq? coll)
+    (apply + (map count-leaves-map coll))
+    1))
+
 (count-leaves four-leaves)
+(count-leaves-map four-leaves)
+
+;Exercise 2.25
+;Extract the 7 from
+(-> '(1 3 (5 7) 9)
+    rest
+    rest
+    first
+    rest)
+(-> '(1 3 (5 7) 9)
+    butlast
+    last
+    last)
+(ffirst '((7)))
+(-> '(1 (2 (3 (4 (5 (6 7))))))
+    last
+    last
+    last
+    last
+    last
+    last)
+
+;Exercise 2.27
+;Modify reverse that takes a list as argument 
+;and returns its elements reversed 
+;and all sublists deep-reversed as well
+
+(defn deep-reverse
+  [coll]
+  (loop [[elem & remaining :as all] (seq coll)
+         reversed                  (empty coll)]
+    (if all
+      (let [next-elem (if (coll? elem)
+                        (deep-reverse elem)
+                        elem)]
+        (recur remaining (cons next-elem reversed)))
+      reversed)))
+
+(deep-reverse [1 2 3 4])
+(deep-reverse [1 2 [3 4]])
+(deep-reverse [1 2 [3 4 [8 7]]])
+(deep-reverse [1 [2 [9 1] 5] [3 4 [8 7]]])
+(deep-reverse '(1 (2 (9 1) 5) (3 4 (8 7))))
