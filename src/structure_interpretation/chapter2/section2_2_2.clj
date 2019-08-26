@@ -60,3 +60,27 @@
 (deep-reverse [1 2 [3 4 [8 7]]])
 (deep-reverse [1 [2 [9 1] 5] [3 4 [8 7]]])
 (deep-reverse '(1 (2 (9 1) 5) (3 4 (8 7))))
+
+; Exercise 2.28
+; Fringe - flatten a tree with leaves arrange left to right
+
+
+; Now I'm saying reverse when it is a collection
+; I need to say flatten when it is a collection and add it to the
+; accumulated version. 
+; When it is an element add it, 
+; When it's a collection, flatten it and add it
+(defn fringe
+  [coll]
+  (loop [[elem & remaining :as all] (seq coll)
+         flattened                  (empty coll)]
+    (if all
+      (let [next-elem (if (coll? elem)
+                        (fringe elem)
+                        [elem])]
+        (recur remaining (concat flattened next-elem)))
+      flattened)))
+
+(fringe [2 1 [4 3 [8 7]]])
+(fringe '(1 (2 (9 1) 5) (3 4 (8 7))))
+
