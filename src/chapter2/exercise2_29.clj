@@ -57,11 +57,16 @@
   [branch]
   (* (branch-length branch)
      (if (coll? (branch-structure branch))
-       (* (calculate-torque (left-branch  (branch-structure branch)))
-          (calculate-torque (right-branch (branch-structure branch))))
+       (let [L  (calculate-torque (left-branch  (branch-structure branch)))
+             R  (calculate-torque (right-branch (branch-structure branch)))
+             _  (prn branch (= L R))]
+         (* L R))
        (branch-structure branch))))
 
-(defn balanced? [mobile]
+(defn balanced? 
+  [mobile]
   (reduce #(and (= %1 %2) 
                 (number? %2)) 
           (map calculate-torque mobile)))
+
+; How can I recursively check all rods are balanced

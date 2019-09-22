@@ -1,5 +1,4 @@
 ###Key ideas:
-
 - compound data
 - compound data object
 - symbolic expresions
