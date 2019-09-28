@@ -40,7 +40,7 @@
   (reduce (fn [acc elem]
             (+ acc 
                (cond 
-                 (every? number? elem) (branch-structure elem)
+                 (and (coll? elem) (every? number? elem)) (branch-structure elem)
                  (coll? elem) (total-weight (branch-structure elem))
                  :else  elem)))
           0 
@@ -53,20 +53,20 @@
 ;; TODO: The algorithm for now just goes recursively in to check
 ;;       - It needs to check if all the hanging structures are balanced as well. 
 
-(defn calculate-torque 
+(defn torque 
   [branch]
   (* (branch-length branch)
-     (if (coll? (branch-structure branch))
-       (let [L  (calculate-torque (left-branch  (branch-structure branch)))
-             R  (calculate-torque (right-branch (branch-structure branch)))
-             _  (prn branch (= L R))]
-         (* L R))
-       (branch-structure branch))))
+     (if (number? (branch-structure branch))
+       (branch-structure branch)
+       (total-weight (branch-structure branch)))))
 
+; How do I plan to balance this?
+; Get the weight for each rod at each level. Compare all torques on a branch 
+;  and make sure that whenever there is branching there is equality
+;  How do I calculate the torque?
+;  What does need to be checked at the same time at each step?
 (defn balanced? 
   [mobile]
-  (reduce #(and (= %1 %2) 
-                (number? %2)) 
-          (map calculate-torque mobile)))
-
-; How can I recursively check all rods are balanced
+  (let [L (left-branch mobile)
+        R (right-branch mobile)]
+    (= L R)))
