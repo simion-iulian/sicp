@@ -67,13 +67,10 @@
 ;  What does need to be checked at the same time at each step?
 (defn balanced? 
   [mobile]
-  (let [L (left-branch mobile)
-        R (right-branch mobile)
-        inner-balance? #(if (coll? (branch-structure %))
-                          (balanced? (branch-structure %))
-                          true)]
-    (and (->> (map torque [L R])
-              (apply =))
-         (->> (map inner-balance? [L R])
-              (apply =)))))
+  (let [inner-balance? #(if (number? (branch-structure %))
+                          true
+                          (balanced? (branch-structure %)))
+        check? #(apply = (map % mobile))]
+    (->> (map check? [torque inner-balance?])
+         (every? true?))))
 
