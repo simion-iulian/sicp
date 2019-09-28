@@ -68,5 +68,12 @@
 (defn balanced? 
   [mobile]
   (let [L (left-branch mobile)
-        R (right-branch mobile)]
-    (= L R)))
+        R (right-branch mobile)
+        inner-balance? #(if (coll? (branch-structure %))
+                          (balanced? (branch-structure %))
+                          true)]
+    (and (->> (map torque [L R])
+              (apply =))
+         (->> (map inner-balance? [L R])
+              (apply =)))))
+

@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [chapter2.exercise2-29 :refer :all]))
 
-(def balanced-mobile2 (make-mobile
+(def big-balanced-mobile (make-mobile
                        (make-branch 3 (make-mobile
                                        (make-branch 3 23)
                                        (make-branch 3 23)))
@@ -10,7 +10,7 @@
                                        (make-branch 3 23)
                                        (make-branch 3 23)))))
 
-#_(def unbalanced-mobile2 (make-mobile
+(def big-unbalanced-mobile (make-mobile
                         (make-branch 3 (make-mobile
                                          (make-branch 3 
                                                       (make-mobile
@@ -18,11 +18,11 @@
                                                         (make-branch 3 4)))
                                          (make-branch 3 12)))
                         (make-branch 3 (make-mobile
-                                         (make-branch 3 144)
+                                         (make-branch 3 5)
                                          (make-branch 3 
                                                       (make-mobile
-                                                        (make-branch 3 4)
-                                                        (make-branch 4 3)))))))
+                                                        (make-branch 3 2)
+                                                        (make-branch 2 3)))))))
 
 (deftest binary-mobile-test
   (testing "calculating total weight"
@@ -65,8 +65,16 @@
                              (make-branch 2 22)
                              (make-branch 2 (make-mobile
                                              (make-branch 2 11)
-                                             (make-branch 2 11))))]
+                                             (make-branch 2 11))))
+            deeper-unbalanced (make-mobile
+                               (make-branch 2 22)
+                               (make-branch 2 (make-mobile
+                                               (make-branch 5 11)
+                                               (make-branch 2 11))))]
         (is (balanced? basic-balanced))
         (is (not (balanced? basic-unbalanced)))
         (is (balanced? deeper-balanced))
-        )))
+        (is (not (balanced? deeper-unbalanced)))
+        (is (balanced? big-balanced-mobile))
+        (is (not (balanced? big-unbalanced-mobile))))))
+
