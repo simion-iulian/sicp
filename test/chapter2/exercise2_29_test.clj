@@ -3,26 +3,26 @@
             [chapter2.exercise2-29 :refer :all]))
 
 (def big-balanced-mobile (make-mobile
-                       (make-branch 3 (make-mobile
-                                       (make-branch 3 23)
-                                       (make-branch 3 23)))
-                       (make-branch 3 (make-mobile
-                                       (make-branch 3 23)
-                                       (make-branch 3 23)))))
+                          (make-branch 3 (make-mobile
+                                          (make-branch 3 23)
+                                          (make-branch 3 23)))
+                          (make-branch 3 (make-mobile
+                                          (make-branch 3 23)
+                                          (make-branch 3 23)))))
 
 (def big-unbalanced-mobile (make-mobile
-                        (make-branch 3 (make-mobile
-                                         (make-branch 3 
-                                                      (make-mobile
-                                                        (make-branch 4 3)
-                                                        (make-branch 3 4)))
-                                         (make-branch 3 12)))
-                        (make-branch 3 (make-mobile
-                                         (make-branch 3 5)
-                                         (make-branch 3 
-                                                      (make-mobile
-                                                        (make-branch 3 2)
-                                                        (make-branch 2 3)))))))
+                            (make-branch 3 (make-mobile
+                                            (make-branch 3 
+                                                         (make-mobile
+                                                          (make-branch 4 3)
+                                                          (make-branch 3 4)))
+                                            (make-branch 3 12)))
+                            (make-branch 3 (make-mobile
+                                            (make-branch 3 5)
+                                            (make-branch 3 
+                                                         (make-mobile
+                                                          (make-branch 3 2)
+                                                          (make-branch 2 3)))))))
 
 (deftest binary-mobile-test
   (testing "calculating total weight"

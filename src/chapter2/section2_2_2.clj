@@ -84,3 +84,72 @@
 (fringe [2 1 [4 3 [8 7]]])
 (fringe '(1 (2 (9 1) 5) (3 4 (8 7))))
 
+; Exercise 2.29 is not here but in it's own namespace
+;; Mapping over trees
+
+(defn scale-tree
+  [coll factor]
+  (loop [[elem & remaining :as all] (seq coll)
+         scaled                  (empty coll)]
+    (if all
+      (let [next-elem (if (coll? elem)
+                        (scale-tree elem factor)
+                        (* elem factor))]
+        (recur remaining (concat scaled [next-elem])))
+      scaled)))
+
+;; Exercise 2.30
+(defn square-tree
+  [coll]
+  (loop [[elem & remaining :as all] (seq coll)
+         squared                  (empty coll)]
+    (if all
+      (let [next-elem (if (coll? elem)
+                        (square-tree elem)
+                        (* elem elem))]
+        (recur remaining (concat squared [next-elem])))
+      squared)))
+
+(scale-tree [1 2] 3)
+(scale-tree [1 [2 7]] 3)
+(square-tree [1 [2 7]])
+(scale-tree [[1 [5 9]] [2 7]] 3)
+(square-tree [[1 [5 9]] [2 7]])
+(square-tree '(1 (5 9) (2 7)))
+
+;;Ex 2.30
+(defn square-list [items]
+  (reduce (fn [acc elem] 
+            (concat acc 
+                    [(if (coll? elem)
+                       (square-list elem)
+                       (* elem elem))]))  
+          []
+          items))
+
+;; Ex 2.31
+(defn tree-map [items f]
+  (reduce (fn [acc elem]
+            (concat acc
+                    [(if (coll? elem)
+                       (tree-map elem f)
+                       (f elem))]))
+          []
+          items))
+
+(tree-map '(1 (5 9) (2 7)) #(* % %))
+
+;; Ex 2.32
+(defn subsets [s]
+  (if (nil? s) '(())
+    (let [remaining (subsets (next s))]
+      (concat remaining 
+              (map (fn [elem] 
+                     (cons (first s) elem)) 
+                   remaining)))))
+;;Why is it working?
+;; It works because it builds the subsets bottom up by mapping the first element over the empty list, then joins 
+;; the remaining ones then adding at each step the subsets previously built, leading to all the possible subsets.
+(subsets '(1 2 3) 0)
+(subsets '(1 2 3 4) 0)
+(subsets [1 2 3 4] 0)

@@ -127,5 +127,6 @@
 ;When the answer is second the result is always first, but the first element in the passed down result ends up being the last element
 ;So it doesn't matter the order, the result is the same
 (square-list [1 2 3])
+(square-list '(1 2 3))
 
 ;;
