@@ -21,19 +21,19 @@
   - 2.1.2 [x] Abstraciton barriers
   - 2.1.3 [x] What is Meant by Data?
   - 2.1.4 [-]Extended Exercise: Interval Arithmetic
-  - 2.2 [] Hierarchical Data and the Closure Property
-  - 2.2.1 [] Representing Sequences
-    - [] List Operations
-    - [] Mapping over lists
-  - 2.2.2 [] Hierarchical Structures
-  - 2.2.3 [] Sequences as Conventional Interfaces
+  - 2.2 [x] Hierarchical Data and the Closure Property
+  - 2.2.1 [x] Representing Sequences
+    - [x] List Operations
+    - [x] Mapping over lists
+  - 2.2.2 [x] Hierarchical Structures
+  - 2.2.3 [...] Sequences as Conventional Interfaces
     - [] Sequence Operations
     - [] Nested Mappings
   - 2.2.4 Example: A Picture Language
-    - Higher-order operations
-    - Frames
-    - Painters
-    - Transforming and combining painters
+    - [] Higher-order operations
+    - [] Frames
+    - [] Painters
+    - [] Transforming and combining painters
     - **Levels of language for robust design**
   - 2.3 Symbolic Data
   - 2.3.1 Quotation
