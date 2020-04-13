@@ -14,19 +14,19 @@
     - [x] Procedures as General Methods
     - [x] Procedures as Returned Values  
 * Chapter 2 - **Building Abstractions with Data**:
-  - 2.1 [x] Introduction to Data Abstraction
-  - 2.1.1 [x] Example: Arithmetic Operations for Rational Numbers
+  - [x] 2.1 Introduction to Data Abstraction
+  - [x] 2.1.1 Example: Arithmetic Operations for Rational Numbers
       - [x] Pairs
       - [x] Representing rational numbers
-  - 2.1.2 [x] Abstraciton barriers
-  - 2.1.3 [x] What is Meant by Data?
-  - 2.1.4 [-]Extended Exercise: Interval Arithmetic
-  - 2.2 [x] Hierarchical Data and the Closure Property
-  - 2.2.1 [x] Representing Sequences
+  - [x] 2.1.2 Abstraciton barriers
+  - [x] 2.1.3 What is Meant by Data?
+  - [-] 2.1.4 Extended Exercise: Interval Arithmetic
+  - [x] 2.2 Hierarchical Data and the Closure Property
+  - [x] 2.2.1 Representing Sequences
     - [x] List Operations
     - [x] Mapping over lists
-  - 2.2.2 [x] Hierarchical Structures
-  - 2.2.3 [x] Sequences as Conventional Interfaces
+  - [x] 2.2.2 Hierarchical Structures
+  - [x] 2.2.3 Sequences as Conventional Interfaces
     - [x] Sequence Operations
     - [] Nested Mappings
   - 2.2.4 Example: A Picture Language
