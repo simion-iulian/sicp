@@ -26,8 +26,8 @@
     - [x] List Operations
     - [x] Mapping over lists
   - 2.2.2 [x] Hierarchical Structures
-  - 2.2.3 [...] Sequences as Conventional Interfaces
-    - [] Sequence Operations
+  - 2.2.3 [x] Sequences as Conventional Interfaces
+    - [x] Sequence Operations
     - [] Nested Mappings
   - 2.2.4 Example: A Picture Language
     - [] Higher-order operations

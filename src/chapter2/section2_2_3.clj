@@ -56,18 +56,220 @@
 
 ;Ex 2.36
 
-(defn accumulate-n
+(defn- all-seqs-same-length?
+  [seqs]
+  (apply = (map count seqs)))
+
+;it is accumulate-n in the book
+(defn accumulate-vertically
   "Like reduce, but takes in a sequence of sequences of the same length, 
-   and applies the operation on elements vertically instead of on each sequence"
+   and applies the operation on elements vertically instead of horizontally"
   [op init seqs]
-  {:pre [(apply = (map count seqs))]}
-  (->> seqs
-       (apply interleave)
-       (partition (count seqs))
-       
-       (map (partial reduce op init))))
+  {:pre [(all-seqs-same-length? seqs)]}
+  (let [column-size (count seqs)]
+        ;; put all elements one after the other, basically put all columns in one array
+    (->> (apply interleave seqs)
+       ;; then group them by column, such that now we have sequences of columns and not of rows
+         (partition column-size)
+       ;; then apply the operation on each grouping to get the result
+         (map (partial reduce op init)))))
 
-(accumulate-n + 10 [[1 2 3 1] [6 6 6 1] [7 7 7 1]])
-(accumulate-n + 10 [[1 2 3 1] [6 6 6 1] [7 7 1]])
+(accumulate-vertically + 10 [[1 2 3 1] [6 6 6 1] [7 7 7 1]])
+; (accumulate-vertically + 10 [[1 2 3 1] [6 6 6 1] [7 7 1]]) ;; assertion failing
 
-(count)
+
+;; Exercise 2.37
+;; Matrix manipulation exercise
+;; Vectors v = (v[i])
+;; matrices m = (m[i][j]) - sequences of vectors
+;; [[1 2 3 9]
+;;  [5 3 6 4]
+;;  [8 5 3 2]]
+
+;; (dot-product v w) - sigma[i] v[i] w[i]
+;; (matrix-*-vector m v)
+;; (matrix-*-matrix m n)
+;; (transpose m)
+
+(defn transpose
+  "Like reduce, but takes in a sequence of sequences of the same length, 
+   and applies the operation on elements vertically instead of horizontally"
+  [seqs]
+  {:pre [(all-seqs-same-length? seqs)]}
+  (let [column-size (count seqs)]
+    (->> (apply interleave seqs)
+         (partition column-size))))
+
+
+(transpose [["00" "01" "02"]
+            ["10" "11" "12"]])
+
+(defn dot-product
+  "Product of the two vectors multiplied at each index" 
+  [seq1 seq2]
+  (->> (transpose [seq1 seq2])
+       (map (partial reduce *))
+       (reduce *)))
+(dot-product [1 2] [3 4])
+
+(defn matrix-*-vector
+  "t[i] |-> sigma[j] = m[i][j] * v[j]"
+  [matrix multiplier-vector]
+  {:pre [(all-seqs-same-length? (conj matrix multiplier-vector))]} 
+  (map (partial dot-product multiplier-vector) matrix))
+
+(matrix-*-vector [[1 2 3] [3 4 5]] [3 4 7])
+
+(defn matrix-*-matrix
+  [matrix1 matrix2]
+  (->> (transpose matrix2)
+       (map (partial matrix-*-vector matrix1))))
+
+(matrix-*-matrix [[1 2 3] 
+                  [4 5 6]]
+                 [[2 3] 
+                  [4 5] 
+                  [6 7]])
+
+(matrix-*-matrix [[2 3]
+                  [4 5]
+                  [6 7]]
+                 [[1 2 3]
+                  [4 5 6]])
+
+;; Nested mappings
+;; Find all ordered pairs of distinct positive integers i and j where 1 <= j < i <= n
+
+(defn- prime? 
+  [n]
+  (.isProbablePrime (.toBigInteger (bigint n)) 10))
+
+(def sum (partial apply +))
+
+(defn prime-sum-pairs
+  "Create all combinations of 1 <= j < i <= n"
+  [n]
+  (->> (range 1 (inc n))
+       (mapcat (fn [i]
+                 (map (fn [j] (list i j))
+                      (range 1 i))))
+       (filter #(prime? (sum %)))
+       (map #(concat % [(sum %)]))))
+
+(defn for-pairs-sum
+  "Create all combinations of 1 <= j < i <= n
+   This is using idiomatic Clojure sequence comprehensions to solve the same problem
+   avoiding the need of accumulating, enumerating, mapping and filtering in SICP"
+  [n]
+  (for [i (range 1 (inc n))
+        j (range 1 i)
+        :let [sum (+ i j)]
+        :when (prime? sum)]
+    (list i j sum)))
+
+(time (prime-sum-pairs 6))
+  (time (for-pairs-sum 6))
+
+(defn subsets 
+  [s]
+  (if (nil? s) '(())
+      (let [remaining (subsets (next s))]
+        (concat remaining
+                (map (fn [elem]
+                       (cons (first s) elem))
+                     remaining)))))
+
+(subsets [1 2 3])
+
+;; Plan for premutations
+;; Example of permutations
+;; => ((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1))
+;; Observation: one can take 1 2 3 and just rotate the numbers by one
+;; Then invert all the rotated sets and have all the permutations for (1 2 3)
+;; SICP plan for generating permutations in a set S:
+;; For each item x in S,
+;;
+;; **recursively** generate 
+;; the sequence of permutations of S - x
+;; and adjoin x to the front of each one
+;;
+;; This yields, for each x in S, 
+;; the sequence of permutaitons of S that begin with x
+;; Combining these sequences for all x gives all the permutations of S  
+
+(defn permutations
+  [some-set]
+  (prn (format "%s %10s" "set:" (str (seq some-set))))
+  (if-not (seq some-set)
+    [[]]
+    (mapcat (fn [x]
+              ;; this map constructs the next permutation. 
+              ;;It is passed where each element is removed by each call to the first mapping
+              (map (fn [p]
+                     (cons x p))
+                   (permutations (remove (partial = x) some-set)))) ;; this also removes duplicates
+            ;;1. X is being passed into the mapcat/flatmap such that it is removed in the next call to permutations
+            some-set)))
+
+;;the map below is being passed the collection that is built from above with one less element
+;; and told to join in the beginning the removed element 
+;; to the result of the sub-permutations built without it
+
+(permutations [1 2 3])
+
+
+;; Ex 2.41
+(defn ordered-triples-less-than
+  "Create all combinations of 1 <= k < j < i <= n
+   This is using idiomatic Clojure sequence comprehensions to solve the same problem
+   avoiding the need of accumulating, enumerating, mapping and filtering in SICP"
+  [n s]
+  (for [i (range 1 (inc n))
+        j (range 1 i)
+        k (range 1 j)
+        :let [sum (+ i j k)]
+        :when (= sum s)]
+    (list i j k)))
+
+;; 2.42 Eight Queens problem
+;; How to place eight queens on the chessboard so that no queen is in check from any other
+;; One solution:
+;; Work across the board, placing a queen in each column.
+;; Once we have placed k-1 queens, 
+;; we must place the kth queen in a position where it does not check with any of the queens already on the board
+;; Formulating recursively:
+;; Assume we already generated the sequence of all possible ways to place k-1 queens in the first k-1 columns
+;; For each of these ways, generate an extended set of positions by placing a queen in each row of the kth column
+;; Now filter these, keeping only the positions for which the queen in the kth column is safe with respect to the other queens
+;; This produces the sequence of all ways to place k queens in the first k columns
+;; By continuing this process, we will produce not only one solution, but all solutions to the puzzle
+
+;; place queen in the new position
+;; check that the new position is safe with respect the previously placed queens
+;; add to the set of positions of queens
+(defn- safe?
+  "k is the new position
+   positions is the set of the other positions
+   safe? returns true when k does not conflict with any of the previous positions"
+  [k positions]
+  ;; false if k has same column
+  ;; false if k has same row
+  ;; false if on the diagonal
+  )
+
+;; x-n-
+;; -n--
+;; n-n- 
+;; ---n
+(defn queens 
+  [board-size]
+  (letfn [(queen-cols [k]
+            (if (= k 0)
+              [[]]
+              (filter (fn [positions] (safe? k positions))
+                      (mapcat (fn [rest-of-queens]
+                                (map (fn [new-row]
+                                       (adjoin-position new-row k rest-of-queens))
+                                     (range 1 board-size)))
+                              (queen-cols (dec k))))))]
+    (queen-cols board-size)))

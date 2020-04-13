@@ -1,5 +1,5 @@
 (defn p [] (p))
-(+ 1 1)
+
 (defn test [x y]
   (if (= x 0)
     0

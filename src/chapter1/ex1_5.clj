@@ -20,3 +20,4 @@
 (new-sqrt 9) ; => StackOverflowError
 ; Blows the stack because new-sqrt-iter gets passed as argument. 
 ; After the first evaluation and it gets stuck in a new-sqrt iter call
+; This is also because if is a special form that short circuits preventing the loop, which doesn't happen with new-if

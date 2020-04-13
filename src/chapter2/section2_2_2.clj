@@ -150,6 +150,6 @@
 ;;Why is it working?
 ;; It works because it builds the subsets bottom up by mapping the first element over the empty list, then joins 
 ;; the remaining ones then adding at each step the subsets previously built, leading to all the possible subsets.
-(subsets '(1 2 3) 0)
-(subsets '(1 2 3 4) 0)
-(subsets [1 2 3 4] 0)
+(subsets '(1 2 3) )
+(subsets '(1 2 3 4) )
+(subsets [1 2 3 4] )
