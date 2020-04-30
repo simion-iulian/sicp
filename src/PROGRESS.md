@@ -28,7 +28,7 @@
   - [x] 2.2.2 Hierarchical Structures
   - [x] 2.2.3 Sequences as Conventional Interfaces
     - [x] Sequence Operations
-    - [] Nested Mappings
+    - [x] Nested Mappings
   - 2.2.4 Example: A Picture Language
     - [] Higher-order operations
     - [] Frames
