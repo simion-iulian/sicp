@@ -1,30 +1,11 @@
 ## On the what of expressiveness
-Reading chapter 1 I get why functional programming can be so difficult to grasp to somebody coming from the imperative and objectual world. It's the conversation around abstraction vs concretions taken to a whole new level. By the end of the chapter I got to see how a procedure returned as a value provides two layers of abstraction in one place. It is easier to encapsulate the behavior in an object and make it domain specific rather than make the effort to find the generic way of abstracting the domain operation. It also makes it harder to communicate with other engineers and developers who are used to the object and procedural model, since they will be used to the patterns present in the language, as well as it's semantics. Expressiveness is very powerful, yet in proportion to its power comes the necessity to understand how to use it. Expressiveness is taking multiple ideas and putting them in one place. Programming is far more about ideas than about programming languages, patterns. It's about how ideas are travelling through the systems and programs and how ideas interact with ideas. Expressiveness is about how clearly one makes the idea of a process to be understood in one place, or what ideas or being used there.
+Reading chapter 1 I see why functional programming can be difficult to grasp to somebody coming from the imperative and object world. It's the conversation around abstraction vs concretions taken to a whole new level. By the end of the chapter I got to see how a procedure returned as a value provides two layers of abstraction in one place. It seems easier to encapsulate the behavior in an object and make it domain specific rather than make the effort to find the generic way of abstracting the domain operation. 
 
-It took SICP about 70 pages to prove the point of how to write a program that's easy to be read. That is to say it's not easy to write a program to be read without all the sophistry that goes behind how a computational process works. Therefore the idea behind expressiveness is to make it easier to understand a computational process and where to look for it rather than (What is a misconception about expressiveness) about how easy is to make something with a programming language (a la Ruby with the fancy syntactic sugar going on)
+Expressiveness is very powerful, yet in proportion to its power comes the necessity to understand how to use it. Expressiveness is taking multiple ideas and putting them in one place. Programming is far more about ideas than about programming languages, patterns. It's about how ideas are travelling through the systems and programs and how ideas interact with ideas. Expressiveness is about how clearly one makes the idea of a process to be understood in one place, or what ideas or being used there.
 
-Therefore expresiveness should be part of the language but at the same time it would be good if it sits in its own layer. A layer where the concepts and abstractions are clear and then there is a layer underneath where it gets closer to what the machine does. One cannot do without the other if the program is to be well written.
+There also is a conceptual leap to make from thinking in objects to thinking in computational processes and data. I do find though that in both cases it is better to think first of how the code might change, rather than what the most expressive way of doing things. [A blog post about expressiveness vs ease of change](https://overreacted.io/goodbye-clean-code)
 
-Expressiveness is about how easy it is to put an idea from the mind into code and how easy it is to read that idea afterwards. Jargon, complexity and fuzzy thinking lead to confusion. Expressiveness and clarity are the two wings of good programming. 
+It took SICP about 70 pages to prove the point of how to write a program that's easy to be read. That is to say, it's not easy to write a program that is easy to be read without all the sophistry that goes behind how a computational process works. I think good naming goes in here, though it's not always possible to give a name to the process. The book [Data and Reality](https://www.amazon.com/Data-Reality-Perspective-Perceiving-Information/dp/1935504215) goes into depth about why even naming things is hard given it's not always easy to point at what is one thing and what is the same thing when trying to come up with a data model. If the data model cannot be precise then the computational process that works with that data will have to deal with these shortcoming. While the model becomes clearer the implementation needs to reflect this, otherwise making the new features work will be slow until the [technical debt](https://www.martinfowler.com/bliki/TechnicalDebt.html) is paid.
 
-**How can I learn to write expressive code?**
-This is my own journey into learning to love programming. I notice how others love the puzzles, and it's important I'm fairly good at that too, there is no other way of tackling complexity without the love and the fun of the puzzle. Yet I find that limiting to be the only motivating factor in why I program and how I progress as a creator of programs. 
+Expressiveness is about how easy it is to put an idea from the mind into code and how easy it is to read that idea afterwards. Jargon, complexity and fuzzy thinking lead to confusion. Expressiveness and clarity are the two wings of good programming. This means the code is easier to change when that is required and parts can work independently from one another. In this case it is easier to pay the technical debt. 
 
-Therefore there is no other way than going through a lot of puzzles and in my attempts to solve them find my way of expressing them in intersting and exciting ways. This way I build my own vocabulary of tools and find the zen of programming. This is just blabber until I have explore my first study.
-
-I also feel I'm putting aside the business aspects because I'm sliding again into programming as an art form instead of a craft. I love play, yet I get bored fast and it's easy for me to get distracted into all these thoughts. Therefore how can I show integrity and thrustworthiness about doing it well for somebody else. There are two types of users here: one who are technologically empowered, who are closer to the machine and the users who stand to take out (what benefits?).
-
-## On the how
-**How can I learn to write clear code?**
-Exercises, Katas, Etudes, Projects, Prototypes. The clearer my thinking will about each of them the clearer the code will be too.
-Examples and Blog Articles too.
-
-## On the when
-
-# Further ideas to explore
-- Backwards reasoning - Programs and Maths
-    - How To Solve It - maths
-    - SICP & REPLs - programs
-    - track the reasoning in making of a part of a program    
-- Holding a program in one's head - as well as on paper 
-- The REPL and the Notional Machine
