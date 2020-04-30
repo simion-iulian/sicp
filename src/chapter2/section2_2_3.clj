@@ -194,12 +194,12 @@
 ;; and adjoin x to the front of each one
 ;;
 ;; This yields, for each x in S, 
-;; the sequence of permutaitons of S that begin with x
+;; the sequence of permutations of S that begin with x
 ;; Combining these sequences for all x gives all the permutations of S  
 
 (defn permutations
-  [some-set]
-  (prn (format "%s %10s" "set:" (str (seq some-set))))
+  [some-set call-cnt]
+  (prn (format "%s %10s" "set: " (str (seq some-set))) (format "call-no %d" call-cnt))
   (if-not (seq some-set)
     [[]]
     (mapcat (fn [x]
@@ -207,7 +207,7 @@
               ;;It is passed where each element is removed by each call to the first mapping
               (map (fn [p]
                      (cons x p))
-                   (permutations (remove (partial = x) some-set)))) ;; this also removes duplicates
+                   (permutations (remove (partial = x) some-set) (inc call-cnt)))) ;; this also removes duplicates
             ;;1. X is being passed into the mapcat/flatmap such that it is removed in the next call to permutations
             some-set)))
 
@@ -215,7 +215,7 @@
 ;; and told to join in the beginning the removed element 
 ;; to the result of the sub-permutations built without it
 
-(permutations [1 2 3])
+;; (permutations [1 2 3] 0)
 
 
 ;; Ex 2.41
@@ -244,32 +244,45 @@
 ;; This produces the sequence of all ways to place k queens in the first k columns
 ;; By continuing this process, we will produce not only one solution, but all solutions to the puzzle
 
-;; place queen in the new position
-;; check that the new position is safe with respect the previously placed queens
-;; add to the set of positions of queens
-(defn- safe?
-  "k is the new position
-   positions is the set of the other positions
-   safe? returns true when k does not conflict with any of the previous positions"
-  [k positions]
-  ;; false if k has same column
-  ;; false if k has same row
-  ;; false if on the diagonal
-  )
+;; I'm using a different solution than the one proposed in the book without passing in the kth column, thus comparing all positions with each other.
+;; If I pass it the algorithm can be made faster by checkig only on that specific column.
+;; I found this solution to be shorter and to work in satisfactory time for this exercise.
+(defn safe?
+  [positions]
+  (letfn [(safe-position?
+            [[new-col new-row] [existing-col existing-row]]
+            (and (not= new-row existing-row)
+                 (not= new-col existing-col)
+                 (not= (- new-row new-col) (- existing-row existing-col))
+                 (not= (+ new-row new-col) (+ existing-row existing-col))))]
+    (every?
+     true?
+     (for [pos positions]
+       (->> (remove #{pos} positions)
+            (every? (partial safe-position? pos)))))))
 
-;; x-n-
-;; -n--
-;; n-n- 
-;; ---n
-(defn queens 
-  [board-size]
-  (letfn [(queen-cols [k]
-            (if (= k 0)
-              [[]]
-              (filter (fn [positions] (safe? k positions))
-                      (mapcat (fn [rest-of-queens]
-                                (map (fn [new-row]
-                                       (adjoin-position new-row k rest-of-queens))
-                                     (range 1 board-size)))
-                              (queen-cols (dec k))))))]
-    (queen-cols board-size)))
+(defn queens [board-size]
+  (letfn [(queen-cols
+           [kth-column]
+           (if (zero? kth-column)
+             [#{}]
+             (filter
+              safe?
+              (mapcat 
+               (fn [rest-of-queens]
+                 (->> (for [new-row (range 1 (inc board-size))] 
+                        [kth-column new-row])
+                      (map (partial conj rest-of-queens))))
+               (queen-cols (dec kth-column))))))]
+   (queen-cols board-size)))
+
+;; (time (count (queens 4)))
+;; (time (count (queens 5)))
+;; (time (count (queens 6)))
+;; (time (count (queens 7)))
+;; (time (count (queens 8)))
+;; (time (count (queens 9)))
+;; (time (count (queens 10)))
+
+
+
